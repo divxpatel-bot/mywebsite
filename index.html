@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Assertion — field notes on software &amp; AI quality</title>
+<meta name="description" content="A blog for QA engineers and testers, with a focus on testing AI and LLM-powered products. Bug patterns, test design, and tooling notes from the field.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+
+<!-- ============================================================
+  ADSENSE: once approved, paste your AdSense verification script
+  here in <head>. See README.md → "Turning on ads".
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+============================================================= -->
+</head>
+<body>
+
+<div class="statusbar">
+  <div class="wrap--wide">
+    <div class="statusbar__left">
+      <span class="statusbar__dot"></span>
+      SUITE PASSING · 3 POSTS VERIFIED
+    </div>
+    <div class="statusbar__right">LAST RUN: 2026-07-24</div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap--wide">
+    <a href="index.html" class="logo">the_<span>assertion</span>()</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav').classList.toggle('is-open')">☰ menu</button>
+    <nav class="nav">
+      <a href="index.html">Posts</a>
+      <a href="index.html#tools">Tools</a>
+      <a href="advertise.html">Advertise</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="hero__eyebrow">// QA &amp; AI TESTING</span>
+      <h1>Field notes on software and AI quality.</h1>
+      <p class="lede">Practical write-ups for QA engineers, SDETs, and anyone who has to decide whether an AI feature is actually ready to ship.</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+
+    <!-- FEATURED / PILLAR POST -->
+    <a href="posts/testing-ai-products-field-guide.html" style="text-decoration:none; color:inherit;">
+      <article class="featured">
+        <div class="meta-row">
+          <span class="badge badge--pass">✓ PASS</span>
+          <span class="badge badge--tag">AI Testing</span>
+          <span class="badge badge--tag">Fundamentals</span>
+          <span>9 min read</span>
+        </div>
+        <h2><a href="posts/testing-ai-products-field-guide.html">Testing AI Products: A Field Guide for QA Engineers</a></h2>
+        <p class="excerpt">Traditional QA assumes a feature has one correct output. AI features don't work that way. Here's how to adjust your test strategy — what to check for, how to build a case library despite non-determinism, and where most teams get it wrong first.</p>
+      </article>
+    </a>
+
+    <p class="section-label">Recent posts</p>
+    <div class="post-list">
+
+      <a class="post-row" href="posts/llm-bug-patterns.html">
+        <div class="meta-row">
+          <span class="badge badge--tag">P1</span>
+          <span class="badge badge--tag">AI Testing</span>
+          <span class="badge badge--tag">Bug Patterns</span>
+          <span>7 min read</span>
+        </div>
+        <h3>7 Bug Patterns Unique to LLM-Powered Features</h3>
+        <p>Confident hallucination, prompt leakage, context amnesia, and four more failure modes that don't show up in a traditional test plan — with notes on how to actually catch each one.</p>
+      </a>
+
+      <!-- IN-FEED AD SLOT #1 -->
+      <div class="ad-slot">
+        <span class="ad-slot__label">Advertisement</span>
+        <!-- Paste your <ins class="adsbygoogle"> unit here once AdSense is approved. -->
+        <div style="min-height:90px; display:flex; align-items:center; justify-content:center; color:#8b968f; font-family:var(--font-mono); font-size:13px;">
+          Ad unit — 728×90 or responsive
+        </div>
+      </div>
+
+      <a class="post-row" href="posts/non-deterministic-test-cases.html">
+        <div class="meta-row">
+          <span class="badge badge--tag">P1</span>
+          <span class="badge badge--tag">Test Design</span>
+          <span>8 min read</span>
+        </div>
+        <h3>How to Write Test Cases for Non-Deterministic AI Outputs</h3>
+        <p>You can't assert on an exact string when the same prompt returns a different (valid) answer every time. A practical framework for rubric-based grading, golden sets, and regression testing under uncertainty.</p>
+      </a>
+
+    </div>
+
+    <!-- RECOMMENDED TOOLS — affiliate section, styled as a test environment / stack list -->
+    <p class="section-label" id="tools">Test environment — tools we recommend</p>
+    <div class="disclosure">
+      Some links below are affiliate or referral links. If you sign up through them, this site may earn a small commission at no extra cost to you. We only list tools we'd actually recommend to a colleague.
+    </div>
+    <div class="stack-list">
+      <div class="stack-item">
+        <span class="stack-item__label">CATEGORY:<br>Course</span>
+        <div>
+          <p class="stack-item__name">Test Automation University</p>
+          <p class="stack-item__desc">Free, vendor-neutral courses on Selenium, API testing, and test architecture. A solid starting point before paying for anything.</p>
+        </div>
+        <a class="stack-item__link" href="https://testautomationu.applitools.com/" target="_blank" rel="noopener">Visit →</a>
+      </div>
+      <div class="stack-item">
+        <span class="stack-item__label">CATEGORY:<br>Courses</span>
+        <div>
+          <p class="stack-item__name">Udemy — QA &amp; test automation courses</p>
+          <p class="stack-item__desc">Paid, structured courses on Playwright, Cypress, and API testing. Useful once you know which gap you're filling.</p>
+        </div>
+        <a class="stack-item__link" href="#" target="_blank" rel="noopener nofollow sponsored">Browse →</a>
+      </div>
+      <div class="stack-item">
+        <span class="stack-item__label">CATEGORY:<br>API testing</span>
+        <div>
+          <p class="stack-item__name">Postman</p>
+          <p class="stack-item__desc">Still the fastest way to explore and document an API before you automate anything against it.</p>
+        </div>
+        <a class="stack-item__link" href="https://www.postman.com/" target="_blank" rel="noopener">Visit →</a>
+      </div>
+      <div class="stack-item">
+        <span class="stack-item__label">CATEGORY:<br>Certification</span>
+        <div>
+          <p class="stack-item__name">ISTQB Foundation Level</p>
+          <p class="stack-item__desc">The one certification that reliably clears resume screens at larger companies, even if the material is basic.</p>
+        </div>
+        <a class="stack-item__link" href="https://www.istqb.org/" target="_blank" rel="noopener">Visit →</a>
+      </div>
+    </div>
+
+    <!-- SPONSORED LISTINGS TEASER -->
+    <p class="section-label">Sponsored</p>
+    <div class="listing">
+      <span class="badge badge--sponsor">SPONSORED SLOT</span>
+      <h3>This spot is open</h3>
+      <p>Testing tool, course, or QA-hiring company? This is a featured placement, shown to QA engineers actively reading about test strategy. <a href="advertise.html" style="color:var(--amber); text-decoration:underline;">See listing options →</a></p>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap--wide">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="logo" style="color:#fff;">the_<span style="color:#57D38C;">assertion</span>()</a>
+        <p style="max-width:32ch; margin-top:14px; font-size:14px;">Field notes on software and AI quality, written by a working QA engineer.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Site</h4>
+          <a href="index.html">Posts</a>
+          <a href="about.html">About</a>
+          <a href="advertise.html">Advertise</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="privacy-policy.html">Privacy Policy</a>
+        </div>
+        <div class="footer-col">
+          <h4>Open Source</h4>
+          <a href="https://github.com/YOUR_USERNAME/the-assertion" target="_blank" rel="noopener">Source on GitHub</a>
+          <a href="https://github.com/YOUR_USERNAME/the-assertion/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 The Assertion. Built and open-sourced under the MIT License.</div>
+  </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

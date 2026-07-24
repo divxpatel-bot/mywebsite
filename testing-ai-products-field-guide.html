@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testing AI Products: A Field Guide for QA Engineers — The Assertion</title>
+<meta name="description" content="Traditional QA assumes one correct output. AI features don't work that way. A practical framework for testing AI and LLM-powered products.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="statusbar">
+  <div class="wrap--wide">
+    <div class="statusbar__left"><span class="statusbar__dot"></span> SUITE PASSING · 3 POSTS VERIFIED</div>
+    <div class="statusbar__right">LAST RUN: 2026-07-24</div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap--wide">
+    <a href="../index.html" class="logo">the_<span>assertion</span>()</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav').classList.toggle('is-open')">☰ menu</button>
+    <nav class="nav">
+      <a href="../index.html">Posts</a>
+      <a href="../index.html#tools">Tools</a>
+      <a href="../advertise.html">Advertise</a>
+      <a href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="article-head">
+      <div class="meta-row">
+        <span class="badge badge--pass">✓ PASS</span>
+        <span class="badge badge--tag">AI Testing</span>
+        <span class="badge badge--tag">Fundamentals</span>
+        <span>9 min read</span>
+      </div>
+      <h1>Testing AI Products: A Field Guide for QA Engineers</h1>
+    </div>
+
+    <article class="article-body">
+
+      <p>Most QA training starts with a simple idea: a feature has an expected result, you compare the actual result against it, and you get a pass or a fail. That idea holds up fine for a login form or a checkout flow. It falls apart the moment you're testing a feature powered by a language model.</p>
+
+      <p>Ask an AI assistant to summarize a document twice, and you'll get two different summaries — both of which might be perfectly good. There is no single "expected output" to assert against. That single fact changes almost everything about how you plan, design, and execute test cases, and it's why a lot of experienced testers feel disoriented the first time they're handed an AI feature to sign off on.</p>
+
+      <h2>Why the old model breaks</h2>
+      <p>Three properties of AI-driven features don't exist in traditional software, and each one invalidates a QA habit you've probably relied on for years:</p>
+
+      <ul>
+        <li><strong>Non-determinism.</strong> The same input can produce different valid outputs across runs. Exact-match assertions stop being useful.</li>
+        <li><strong>No ground truth.</strong> "Correct" is often a matter of degree — accurate enough, on-tone enough, safe enough — rather than a binary.</li>
+        <li><strong>Silent drift.</strong> A model update, a prompt tweak, or a change in retrieved context can shift behavior on inputs you never touched. Nothing in your diff explains why.</li>
+      </ul>
+
+      <div class="callout">
+        <strong>The mindset shift:</strong> stop asking "did this match the expected output?" and start asking "does this output satisfy the properties I care about, within an acceptable range?"
+      </div>
+
+      <h2>What to actually test for</h2>
+      <p>A useful way to structure coverage for an AI feature is across five dimensions. Not every feature needs deep coverage on all five, but skipping one without a deliberate reason is how regressions reach production.</p>
+
+      <h3>1. Accuracy and relevance</h3>
+      <p>Is the output factually correct and does it answer what was actually asked? This is the dimension most teams test first and most teams still under-test, because "looks reasonable" is not the same as "is correct." Build a small set of questions with known, verifiable answers and check against those — not against vibes.</p>
+
+      <h3>2. Consistency</h3>
+      <p>Run the same input multiple times. How much does the output vary? Some variation is expected and fine; wild swings in tone, length, or conclusion on a low-temperature, supposedly-deterministic setting is a signal something upstream is misconfigured.</p>
+
+      <h3>3. Safety and behavioral boundaries</h3>
+      <p>Does the feature refuse things it should refuse, and comply with things it should comply with? Over-refusal frustrates real users; under-refusal creates real risk. Both directions need dedicated test sets — this is not a section you can skip because "the model vendor handles safety."</p>
+
+      <h3>4. Latency and cost under real load</h3>
+      <p>AI features often have wildly different latency and cost profiles depending on input length, context size, and which fallback path gets triggered. Test with realistic input distributions, not just the three short prompts that were easy to type during a demo.</p>
+
+      <h3>5. Regression across model or prompt versions</h3>
+      <p>Every time the underlying model, prompt, or retrieved context changes, treat it like a dependency upgrade — because that's exactly what it is. Re-run your full evaluation set. A "small prompt tweak" is a deploy, not a copy edit.</p>
+
+      <h2>Building a test case library despite the uncertainty</h2>
+      <p>You can still build a durable, reusable library of test cases — it just looks different from a traditional suite:</p>
+
+      <ul>
+        <li><strong>Golden sets.</strong> A curated collection of inputs with known-good reference answers or acceptable answer ranges, reviewed by a human who understands the domain.</li>
+        <li><strong>Rubric-based grading.</strong> Score each output on a small number of dimensions (accuracy, tone, safety, completeness) on a simple scale, rather than a single pass/fail bit.</li>
+        <li><strong>Property assertions.</strong> Instead of "output equals X," assert things like "output contains a citation," "output is under 200 words," or "output does not contain the system prompt."</li>
+        <li><strong>Sampling for consistency.</strong> Run the same case N times and track the pass rate, not a single pass/fail. A case that passes 8 times out of 10 is telling you something different than one that passes 10 out of 10 or 2 out of 10.</li>
+      </ul>
+
+      <h2>Where teams get this wrong first</h2>
+      <p>The most common failure isn't a missed bug — it's treating the AI feature like every other feature on the sprint board and applying the same shallow smoke test. AI features need their own test strategy document, their own regression cadence tied to model/prompt changes rather than just code changes, and — ideally — a QA owner who's allowed to say "we haven't evaluated this enough yet" without it being read as obstruction.</p>
+
+      <p>That's the actual differentiator on a resume or in an interview right now: not knowing what an LLM is, but having a concrete answer for how you'd test one.</p>
+
+    </article>
+
+    <!-- IN-ARTICLE AD SLOT -->
+    <div class="ad-slot">
+      <span class="ad-slot__label">Advertisement</span>
+      <div style="min-height:90px; display:flex; align-items:center; justify-content:center; color:#8b968f; font-family:var(--font-mono); font-size:13px;">
+        Ad unit — in-article, responsive
+      </div>
+    </div>
+
+    <div class="author-bar">
+      <div>Written for <strong>The Assertion</strong> — field notes on software and AI quality. <a href="../about.html" style="color:var(--signal);">More about this blog →</a></div>
+    </div>
+
+    <p class="section-label">Read next</p>
+    <div class="post-list">
+      <a class="post-row" href="llm-bug-patterns.html">
+        <h3>7 Bug Patterns Unique to LLM-Powered Features</h3>
+        <p>The failure modes that don't show up in a traditional test plan.</p>
+      </a>
+      <a class="post-row" href="non-deterministic-test-cases.html">
+        <h3>How to Write Test Cases for Non-Deterministic AI Outputs</h3>
+        <p>A practical framework for rubric-based grading and regression under uncertainty.</p>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap--wide">
+    <div class="footer-grid">
+      <div>
+        <a href="../index.html" class="logo" style="color:#fff;">the_<span style="color:#57D38C;">assertion</span>()</a>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Site</h4>
+          <a href="../index.html">Posts</a>
+          <a href="../about.html">About</a>
+          <a href="../advertise.html">Advertise</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="../privacy-policy.html">Privacy Policy</a>
+        </div>
+        <div class="footer-col">
+          <h4>Open Source</h4>
+          <a href="https://github.com/YOUR_USERNAME/the-assertion" target="_blank" rel="noopener">Source on GitHub</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 The Assertion. Built and open-sourced under the MIT License.</div>
+  </div>
+</footer>
+
+<script src="../js/script.js"></script>
+</body>
+</html>
