@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Write Test Cases for Non-Deterministic AI Outputs — The Assertion</title>
+<meta name="description" content="You can't assert on an exact string when the same prompt returns a different valid answer every time. A practical framework for testing non-deterministic AI outputs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="statusbar">
+  <div class="wrap--wide">
+    <div class="statusbar__left"><span class="statusbar__dot"></span> SUITE PASSING · 3 POSTS VERIFIED</div>
+    <div class="statusbar__right">LAST RUN: 2026-07-24</div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap--wide">
+    <a href="../index.html" class="logo">the_<span>assertion</span>()</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav').classList.toggle('is-open')">☰ menu</button>
+    <nav class="nav">
+      <a href="../index.html">Posts</a>
+      <a href="../index.html#tools">Tools</a>
+      <a href="../advertise.html">Advertise</a>
+      <a href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="article-head">
+      <div class="meta-row">
+        <span class="badge badge--tag">P1</span>
+        <span class="badge badge--tag">Test Design</span>
+        <span>8 min read</span>
+      </div>
+      <h1>How to Write Test Cases for Non-Deterministic AI Outputs</h1>
+    </div>
+
+    <article class="article-body">
+      <p>A traditional test case looks like this: given this input, expect this exact output. That structure assumes the system is deterministic. Point it at a language model and it breaks immediately — ask the same question twice and you can get two different, equally correct answers. That doesn't mean the feature is untestable. It means the test case needs a different shape.</p>
+
+      <h2>Replace exact-match with property assertions</h2>
+      <p>Instead of asserting that the output equals a specific string, assert that it satisfies a property. A few examples that come up often:</p>
+      <ul>
+        <li>Output contains a valid citation or source reference.</li>
+        <li>Output is under a defined word or token count.</li>
+        <li>Output does not mention competitor names, internal system details, or the system prompt.</li>
+        <li>Output, when parsed, matches a defined JSON schema.</li>
+        <li>Output's sentiment or tone falls within an acceptable range for the context.</li>
+      </ul>
+      <p>Each of these is checkable in an automated way, and none of them require the output to be identical between runs.</p>
+
+      <h2>Use rubric-based grading for anything qualitative</h2>
+      <p>For dimensions that can't be reduced to a simple property — is this response helpful, is the tone appropriate, does this actually answer the question — a small rubric works better than a binary pass/fail. A simple version looks like this:</p>
+
+      <pre><code>Dimension:      Accuracy
+Scale:          1 (wrong) – 5 (fully correct, well supported)
+Passing bar:    ≥4
+
+Dimension:      Tone
+Scale:          1 (off-brand) – 5 (on-brand)
+Passing bar:    ≥3
+
+Dimension:      Safety
+Scale:          Pass / Fail (binary — no partial credit)
+Passing bar:    Pass</code></pre>
+
+      <p>Score a sample of outputs against this rubric — either with a trained human reviewer or a calibrated LLM-as-judge setup — and track the pass rate over time, not a single verdict.</p>
+
+      <h2>Build a golden set, and keep it small and honest</h2>
+      <p>A golden set is a curated collection of representative inputs with a known-good reference answer or an acceptable range, reviewed by someone who actually understands the domain — not generated wholesale by the same model you're testing. Keep it small enough that a human can meaningfully review additions, and weight it toward real cases pulled from production or support tickets rather than cases the team invented in a meeting. A golden set built entirely from imagined edge cases tends to miss the edge cases users actually hit.</p>
+
+      <h2>Sample instead of running once</h2>
+      <p>Because outputs vary, a single run tells you very little. Run each case in your suite N times (5–10 is a reasonable starting point) and report a pass rate rather than a single pass/fail. A case passing 9 out of 10 times is a different bug report than one passing 5 out of 10 — and both are different from one that's failing consistently, which usually points to a deterministic bug rather than a model-behavior issue at all.</p>
+
+      <div class="callout">
+        <strong>Practical tip:</strong> when a case fails inconsistently, check whether it's actually non-determinism or whether it's a real bug that only triggers under certain conditions (a race condition, a flaky retrieval step, a timeout). Non-determinism gets blamed for a lot of bugs that are actually deterministic and just under-investigated.
+      </div>
+
+      <h2>Treat every prompt or model change as a deploy</h2>
+      <p>Version your prompts the same way you version code, and re-run the full golden set and rubric scoring whenever a prompt, model, or retrieval source changes — not just when application code changes. A "one-line prompt tweak" has caused more silent regressions on AI teams than most people expect, precisely because it doesn't look like a risky change in a pull request review.</p>
+
+      <h2>A simple test case template</h2>
+      <pre><code>TEST CASE: Refund policy question, ambiguous phrasing
+INPUT: "can i get my money back if i just don't like it"
+PROPERTIES CHECKED:
+  - mentions the return window (14 days)
+  - does not fabricate a policy not in the source docs
+  - tone: helpful, not defensive
+RUBRIC: Accuracy ≥4, Tone ≥3, Safety: Pass
+SAMPLE SIZE: 8 runs
+PASSING BAR: ≥7/8 runs meet all rubric thresholds</code></pre>
+
+      <p>None of this requires exotic tooling to start. A spreadsheet, a small script, and a handful of real cases pulled from actual usage will get a team further than waiting for the "proper" evaluation platform to be approved.</p>
+
+    </article>
+
+    <div class="ad-slot">
+      <span class="ad-slot__label">Advertisement</span>
+      <div style="min-height:90px; display:flex; align-items:center; justify-content:center; color:#8b968f; font-family:var(--font-mono); font-size:13px;">
+        Ad unit — in-article, responsive
+      </div>
+    </div>
+
+    <div class="author-bar">
+      <div>Written for <strong>The Assertion</strong> — field notes on software and AI quality. <a href="../about.html" style="color:var(--signal);">More about this blog →</a></div>
+    </div>
+
+    <p class="section-label">Read next</p>
+    <div class="post-list">
+      <a class="post-row" href="testing-ai-products-field-guide.html">
+        <h3>Testing AI Products: A Field Guide for QA Engineers</h3>
+        <p>A practical framework for what to test and how to build a case library.</p>
+      </a>
+      <a class="post-row" href="llm-bug-patterns.html">
+        <h3>7 Bug Patterns Unique to LLM-Powered Features</h3>
+        <p>The failure modes that don't show up in a traditional test plan.</p>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap--wide">
+    <div class="footer-grid">
+      <div>
+        <a href="../index.html" class="logo" style="color:#fff;">the_<span style="color:#57D38C;">assertion</span>()</a>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Site</h4>
+          <a href="../index.html">Posts</a>
+          <a href="../about.html">About</a>
+          <a href="../advertise.html">Advertise</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="../privacy-policy.html">Privacy Policy</a>
+        </div>
+        <div class="footer-col">
+          <h4>Open Source</h4>
+          <a href="https://github.com/YOUR_USERNAME/the-assertion" target="_blank" rel="noopener">Source on GitHub</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 The Assertion. Built and open-sourced under the MIT License.</div>
+  </div>
+</footer>
+
+<script src="../js/script.js"></script>
+</body>
+</html>
